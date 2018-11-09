@@ -55,7 +55,29 @@ contract TicTacToe{
         }
     }
 
-    // function board_status() public{
-
-    // }
+    function board_status() public view returns{
+        require(msg.sender == player1 || msg.sender == player2, "Only player can see the board");
+        string memory text = "No winner yet";
+        if(game_finish == true){
+            if(winner == player1)   text = "Player 1 won";
+            else    text = "Player 2 won";
+        }
+        byte[] memory legend = new byte[](3);
+        bytes memory status = new bytes(11);
+        legend[0] = "-";
+        legend[1] = "0";
+        legend[2] = "X";
+        for(uint i=0;i<3;i++){
+            bytes(status)[i] = legend[board[i]];
+        }
+        bytes(status)[3] = "|";
+        for(uint i=0;i<3;i++){
+            bytes(status)[i+4] = legend[board[i+3]];
+        }
+        bytes(status)[7] = "|";
+        for(uint i=0;i<3;i++){
+            bytes(status)[i+8] = legend[board[i+6]];
+        }
+        return (text,string(status))
+    }
 }
