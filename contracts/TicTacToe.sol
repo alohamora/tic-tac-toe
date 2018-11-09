@@ -63,7 +63,7 @@ contract TicTacToe{
         }
     }
 
-    function board_status() public view returns{
+    function board_status() public view returns(string,string){
         require(msg.sender == player1 || msg.sender == player2, "Only player can see the board");
         string memory text = "No winner yet";
         if(game_finish == true){
@@ -79,13 +79,13 @@ contract TicTacToe{
             bytes(status)[i] = legend[board[i]];
         }
         bytes(status)[3] = "|";
-        for(uint i=0;i<3;i++){
+        for(i=0;i<3;i++){
             bytes(status)[i+4] = legend[board[i+3]];
         }
         bytes(status)[7] = "|";
-        for(uint i=0;i<3;i++){
+        for(i=0;i<3;i++){
             bytes(status)[i+8] = legend[board[i+6]];
         }
-        return (text,string(status))
+        return (text,string(status));
     }
 }
