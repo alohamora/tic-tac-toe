@@ -7,18 +7,22 @@ contract TicTacToe{
     uint participating_amount;
     uint playerCount = 0;
     bool game_finish = false;
+    uint chance = 0;
     address winner;
     uint[][] winner_check =  [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+    mapping (address => uint) player_chance;
     constructor () public payable{
         require(msg.value > 0, "A participating bid is required");
         player1 = msg.sender;
         playerCount = 1;
+        player_chance[msg.sender] = 0;
     }
 
     function register_second_player() public payable{
         require(playerCount == 1, "Player limit exceeded");
         require(msg.value == participating_amount, "Participating bid required");
         require(msg.sender != player1, "Same players not allowed");
+        player_chance[msg.sender] = 1;
         playerCount = 2;
     }
 
@@ -27,8 +31,11 @@ contract TicTacToe{
         require(msg.sender == player1 || msg.sender == player2, "Not a participant");
         require(game_finish == false, "Game is finished");
         require(board[pos] == 0, "Position is filled");
+        require(pos >= 0 && pos <= 8, "Invalid position");
+        require(player_chance[msg.sender] == chance, "Not your chance");
         if(msg.sender == player1)   board[pos] = 1;
         else    board[pos] = 2;
+        chance = 1 - chance;
         check_winner(msg.sender);
     }
 
@@ -45,4 +52,8 @@ contract TicTacToe{
             }
         }
     }
+
+    // function board_status() public{
+
+    // }
 }
