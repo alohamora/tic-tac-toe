@@ -14,6 +14,7 @@ contract TicTacToe{
     constructor () public payable{
         require(msg.value > 0, "A participating bid is required");
         player1 = msg.sender;
+        participating_amount = msg.value;
         playerCount = 1;
         player_chance[msg.sender] = 0;
     }
@@ -23,6 +24,7 @@ contract TicTacToe{
         require(msg.value == participating_amount, "Participating bid required");
         require(msg.sender != player1, "Same players not allowed");
         player_chance[msg.sender] = 1;
+        player2 = msg.sender;
         playerCount = 2;
     }
 
