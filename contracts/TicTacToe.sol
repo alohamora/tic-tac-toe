@@ -8,6 +8,7 @@ contract TicTacToe{
     uint playerCount = 0;
     bool game_finish = false;
     uint chance = 0;
+    uint deadline;
     address winner;
     uint[][] winner_check =  [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
     mapping (address => uint) player_chance;
@@ -19,6 +20,12 @@ contract TicTacToe{
         player_chance[msg.sender] = 0;
     }
 
+    function get_bid_amount() public view returns(uint){
+        return participating_amount;
+    }
+    function count_getter() public view returns(uint){
+        return playerCount;
+    }
     function register_second_player() public payable{
         require(playerCount == 1, "Player limit exceeded");
         require(msg.value == participating_amount, "Participating bid required");
@@ -26,6 +33,7 @@ contract TicTacToe{
         player_chance[msg.sender] = 1;
         player2 = msg.sender;
         playerCount = 2;
+        deadline = now + 10000;
     }
 
     function makeMove(uint pos) public{
